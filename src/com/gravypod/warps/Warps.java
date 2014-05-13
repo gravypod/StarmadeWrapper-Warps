@@ -14,6 +14,12 @@ public class Warps extends Plugin {
 	@Override
 	public void onDisable(Server server) {
 	
+		list.save();
+	}
+	
+	@Override
+	public void onEnable(Server server) {
+	
 		CommandManager manager = getAssistant().getPluginManager().getCommandManager();
 		list = new WarpList(getDataDir());
 		manager.registerCommand("warp", new WarpCommand(list));
@@ -21,11 +27,7 @@ public class Warps extends Plugin {
 		manager.registerCommand("addwarp", new AddWarpCommand(list));
 		
 		manager.registerCommand("delwarp", new DelWarpCommand(list));
-	}
-	
-	public void onEnable(Server server) {
-	
-		list.save();
+		
 	}
 	
 }
