@@ -5,6 +5,7 @@ import com.gravypod.starmadewrapper.User;
 import com.gravypod.starmadewrapper.plugins.commands.Command;
 import com.gravypod.warps.Warp;
 import com.gravypod.warps.WarpList;
+import com.gravypod.warps.WarpOverrideException;
 
 public class AddWarpCommand extends Command {
 	
@@ -24,7 +25,9 @@ public class AddWarpCommand extends Command {
 			return;
 		}
 		
-		if (args.length != 6) {
+		if (args.length != 6) { // TODO: allow the importing of saved sectors
+								// into these denoted sectors (EX: import a warp
+								// gate into here)
 			pm(username, "Wrong args!");
 			pm(username, getHelp());
 			return;
@@ -50,7 +53,13 @@ public class AddWarpCommand extends Command {
 		
 		w.faction = "all";
 		
-		list.add(w);
+		try {
+			list.add(w);
+		} catch (WarpOverrideException e) {
+			
+			pm(username, "A warp already exists in one of those sectors");
+			return;
+		}
 		pm(username, "Warp " + w.toString() + " has been created.");
 	}
 	

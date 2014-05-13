@@ -27,17 +27,32 @@ public class WarpList {
 		load();
 	}
 	
+	/**
+	 * Get a warp associated with a sector
+	 * @param s - Sector to find a warp associated with
+	 * @return
+	 */
 	public Warp get(Sector s) {
 	
 		return warps.get(s);
 	}
 	
-	public void add(Warp w) {
+	/**
+	 * Add a warp overriding associations with the old sectors
+	 * @param w
+	 */
+	public void add(Warp w) throws WarpOverrideException {
 	
+		
+		if (warps.containsKey(w.start) || warps.containsKey(w.end)) {
+			throw new WarpOverrideException();
+		}
 		warps.put(w.start, w);
 		warps.put(w.end, w);
 		saveWarp(w);
 	}
+	
+	
 	
 	public void remove(Sector s) {
 	
