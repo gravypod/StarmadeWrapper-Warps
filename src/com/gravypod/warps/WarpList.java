@@ -23,7 +23,6 @@ public class WarpList {
 	
 		this.warpFolder = warpFolder;
 		config.setClassTag("Warp", Warp.class);
-		config.setClassTag("Sector", Sector.class);
 		load();
 	}
 	
@@ -94,6 +93,7 @@ public class WarpList {
 	
 		try {
 			YamlWriter writer = new YamlWriter(new FileWriter(getWarpFile(w)), config);
+			
 			writer.write(w);
 			writer.close();
 		} catch (IOException e) {
@@ -128,13 +128,14 @@ public class WarpList {
 	private void loadWarpFile(File f) {
 	
 		try {
-			YamlReader reader = new YamlReader(new FileReader(f));
+			YamlReader reader = new YamlReader(new FileReader(f), config);
 			Warp warp = reader.read(Warp.class);
+			reader.close();
 			warps.put(warp.start, warp);
 			warps.put(warp.end, warp);
-			reader.close();
+			
 		} catch (Exception e) {
-			e.printStackTrace();
+			System.out.println("Error loading " + f.toString() +", ignoring it");
 		}
 		
 	}
