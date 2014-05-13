@@ -29,7 +29,9 @@ public class WarpList {
 	
 	/**
 	 * Get a warp associated with a sector
-	 * @param s - Sector to find a warp associated with
+	 * 
+	 * @param s
+	 *            - Sector to find a warp associated with
 	 * @return
 	 */
 	public Warp get(Sector s) {
@@ -39,11 +41,14 @@ public class WarpList {
 	
 	/**
 	 * Add a warp overriding associations with the old sectors
+	 * 
 	 * @param w
+	 * @throws WarpOverrideException
+	 *             - Thrown then a conflicting warp (one that ends or starts in
+	 *             the same sector) already exists
 	 */
 	public void add(Warp w) throws WarpOverrideException {
 	
-		
 		if (warps.containsKey(w.start) || warps.containsKey(w.end)) {
 			throw new WarpOverrideException();
 		}
@@ -52,8 +57,10 @@ public class WarpList {
 		saveWarp(w);
 	}
 	
-	
-	
+	/**
+	 * Delete a warp from the warp list
+	 * @param s - Endpoint of the warp we want to delete
+	 */
 	public void remove(Sector s) {
 	
 		Warp w = warps.get(s);
@@ -68,6 +75,9 @@ public class WarpList {
 		getWarpFile(w).delete();
 	}
 	
+	/**
+	 * Save all of the warps we know about
+	 */
 	public void save() {
 	
 		for (Warp w : new ArrayList<Warp>(warps.values())) {
@@ -76,6 +86,10 @@ public class WarpList {
 		
 	}
 	
+	/**
+	 * Save warp to file
+	 * @param w
+	 */
 	private void saveWarp(Warp w) {
 	
 		try {
@@ -87,6 +101,9 @@ public class WarpList {
 		}
 	}
 	
+	/**
+	 * Load all known warps
+	 */
 	public void load() {
 	
 		FilenameFilter filder = new FilenameFilter() {
@@ -108,7 +125,7 @@ public class WarpList {
 		
 	}
 	
-	public void loadWarpFile(File f) {
+	private void loadWarpFile(File f) {
 	
 		try {
 			YamlReader reader = new YamlReader(new FileReader(f));
@@ -122,7 +139,7 @@ public class WarpList {
 		
 	}
 	
-	public File getWarpFile(Warp warp) {
+	private File getWarpFile(Warp warp) {
 	
 		return new File(warpFolder, warp.toString() + ".yml");
 	}
